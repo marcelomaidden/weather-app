@@ -1,0 +1,25 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "",
+  "private":  true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcelomaidden/weather-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcelomaidden/weather-app/issues"
+  },
+  "homepage": "https://github.com/marcelomaidden/weather-app#readme",
+  "devDependencies": {
+    "webpack": "^5.12.1",
+    "webpack-cli": "^4.3.1"
+  }
+}
