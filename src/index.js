@@ -2,5 +2,5 @@ import Weather from './weather';
 
 const weather = new Weather();
 
-let searchCity = document.querySelector('.search-city');
-searchCity.addEventListener('keyup', weather.listCities, false);
+let searchCity = document.querySelector('.submit-city');
+searchCity.addEventListener('click', weather.listCities, false);

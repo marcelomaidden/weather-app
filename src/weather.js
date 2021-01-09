@@ -12,20 +12,24 @@ class Weather {
 
   filterCities(beginCharacter) {
     let promise = new Promise((resolve, reject) => {
-      resolve(this.cities.map(({id, name}) => {
+      let result = this.cities.map(({id, name}) => {
         if (name.toLowerCase().startsWith(beginCharacter.toLowerCase()))
+        {
           return {id, name}
+        }
         else
           return "fail"
       }).filter(city => {
-        city !== "fail"
-      }))
+        return city !== "fail"
+      });
+      return resolve(result)
     });
     return promise
   }
   
   async listCities(event) {
-    let beginCharacter = event.target.value;
+    let searchCity = document.querySelector('.search-city');
+    let beginCharacter = searchCity.value;
     if (beginCharacter) {
       this.showSpinner(true);
       let message = document.querySelector('.message');
@@ -39,7 +43,9 @@ class Weather {
       message.innerHTML = "Fetching cities";
       message.setAttribute('class', 'message d-none');
       this.cities = await this.filterCities(beginCharacter);
-  
+      
+      ulCities.innerHTML = '';
+      
       await this.cities.forEach(function({id, name}) {
         let li = document.createElement('li');
         let a = document.createElement('a');
