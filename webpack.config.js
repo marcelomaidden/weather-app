@@ -1,8 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const dotenv = require('dotenv').config( {
-  path: path.join(__dirname, '.env')
-} );
+const dotenv = require('dotenv').config({
+  path: path.join(__dirname, '.env'),
+});
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -10,8 +11,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new webpack.DefinePlugin( {
-      "API_KEY": dotenv.parsed
-    } ),
-  ]
+    new webpack.DefinePlugin({
+      API_KEY: dotenv.parsed,
+    }),
+  ],
 };

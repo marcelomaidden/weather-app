@@ -1,16 +1,20 @@
 class Giphy {
+  constructor() {
+    this.fetchGif = this.fetchGif.bind(this);
+  }
+
   async fetchGif(url) {
-    let div = document.querySelector('.card');
+    const div = document.querySelector('.card');
     await fetch(url, {
-      mode: 'cors'
-    }).then( response => {
+      mode: 'cors',
+    }).then(response => {
       response.json().then(items => {
-        let images = Object.values(items.data.images);
-        
-        div.setAttribute('style', `background: #FFF url(${images[0].url}) no-repeat center center`)
-      })
-    })
+        this.images = Object.values(items.data.images);
+
+        div.setAttribute('style', `background: #FFF url(${this.images[0].url}) no-repeat center center`);
+      });
+    });
   }
 }
 
-export default Giphy
+export default Giphy;
