@@ -91,6 +91,8 @@ class Weather {
   async listCities() {
     const searchCity = document.querySelector('.search-city');
     const beginCharacter = searchCity.value;
+    this.longitude = null;
+    this.latitude = null;
     if (beginCharacter) {
       this.showSpinner(true);
       this.showMessage(true);
