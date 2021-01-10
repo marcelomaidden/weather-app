@@ -1,3 +1,5 @@
+import Giphy from './giphy';
+const giphy = new Giphy();
 class Weather {
   constructor() {
     this.showSpinner = this.showSpinner.bind(this);
@@ -48,17 +50,25 @@ class Weather {
   async showWeather(event) {
     this.showSpinner(true);
     this.setMessage("Reading weather for the chosen city");
-   
+    
     let readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`, 
     {
       method: 'GET',
     });
-    let {weather, main} = await readWeather.json();
-    console.log(weather, main);
-    let {temp} = main;
+    let {weather, main: info} = await readWeather.json();
+    let {temp} = info;
 
-    let divResult = document.querySelector('.results');
-    divResult.innerHTML = temp;
+    let title = document.querySelector('.card-title');
+    let city = event.target.innerText;
+    let text = document.querySelector('.card-text');
+    let temperature = document.querySelector('.temperature');
+    let {description, main: status}  = weather[0];
+    title.innerHTML = city;
+    text.innerHTML =  `${description}`;
+    temperature.innerText = `Temperature: ${temp}`
+
+    await giphy.fetchGif(`https://api.giphy.com/v1/gifs/translate?api_key=${API_KEY.GIPHY_KEY}&s=${status}`);
+
     this.showSpinner(false);
   }
   
