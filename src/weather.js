@@ -49,12 +49,16 @@ class Weather {
     this.showSpinner(true);
     this.setMessage("Reading weather for the chosen city");
    
-    let readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&appid=${API_KEY.API_KEY}`, 
+    let readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`, 
     {
       method: 'GET',
     });
     let {weather, main} = await readWeather.json();
-    console.log(weather,main);
+    console.log(weather, main);
+    let {temp} = main;
+
+    let divResult = document.querySelector('.results');
+    divResult.innerHTML = temp;
     this.showSpinner(false);
   }
   
