@@ -90,7 +90,6 @@ class Weather {
 
         city = event.target.innerText;
       }
-
       const { weather, main: info } = await readWeather.json();
       const { temp } = info;
       this.temperature = temp;
@@ -105,10 +104,11 @@ class Weather {
       const sw = document.querySelector('#switch-temperature');
       sw.checked = false;
       await giphy.fetchGif(`https://api.giphy.com/v1/gifs/translate?api_key=${API_KEY.GIPHY_KEY}&s=${status}`);
+
+      this.showSpinner(false);
     } catch (e) {
       this.showMessage(e, true);
     }
-    this.showSpinner(false);
   }
 
   async listCities() {
