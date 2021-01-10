@@ -2,7 +2,7 @@
   "name": "weather-app",
   "version": "1.0.0",
   "description": "",
-  "private":  true,
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
@@ -19,7 +19,14 @@
   },
   "homepage": "https://github.com/marcelomaidden/weather-app#readme",
   "devDependencies": {
+    "dotenv": "^8.2.0",
+    "dotenv-webpack": "^6.0.0",
+    "install": "^0.13.0",
+    "path-browserify": "^1.0.1",
     "webpack": "^5.12.1",
     "webpack-cli": "^4.3.1"
+  },
+  "dependencies": {
+    "uninstall": "0.0.0"
   }
 }

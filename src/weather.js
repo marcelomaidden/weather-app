@@ -48,7 +48,8 @@ class Weather {
   async showWeather(event) {
     this.showSpinner(true);
     this.setMessage("Reading weather for the chosen city");
-    let readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&appid=2adf01b5e325f219ebee645945fa0afa`, 
+   
+    let readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&appid=${API_KEY.API_KEY}`, 
     {
       method: 'GET',
     });
