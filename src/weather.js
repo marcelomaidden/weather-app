@@ -8,6 +8,7 @@ class Weather {
     this.listCities = this.listCities.bind(this);
     this.filterCities = this.filterCities.bind(this);
     this.showWeather = this.showWeather.bind(this);
+    this.setPosition = this.setPosition.bind(this);
     this.showMessage = this.showMessage.bind(this);
     this.setMessage = this.setMessage.bind(this);
 
@@ -45,19 +46,36 @@ class Weather {
     return promise;
   }
 
+  setPosition(position) {
+    this.latitude = position.coords.latitude;
+    this.longitude = position.coords.longitude;
+    this.showWeather();
+  }
+
   async showWeather(event) {
     this.showSpinner(true);
     this.setMessage('Reading weather for the chosen city');
-
-    const readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`,
+    let readWeather = "";
+    let city = "";
+    if(this.latitude && this.longitude) {
+      readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&appid=${API_KEY.API_KEY}`,
       {
         method: 'GET',
       });
+      city = `Current coordinates = latitude: ${this.latitude}, longitude: ${this.longitude}`;
+    }
+    else{
+      readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`,
+      {
+        method: 'GET',
+      });
+
+      city = event.target.innerText;
+    }
     const { weather, main: info } = await readWeather.json();
     const { temp } = info;
 
     const title = document.querySelector('.card-title');
-    const city = event.target.innerText;
     const text = document.querySelector('.card-text');
     const temperature = document.querySelector('.temperature');
     const { description, main: status } = weather[0];
