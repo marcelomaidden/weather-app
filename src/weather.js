@@ -3,6 +3,19 @@ class Weather {
     this.showSpinner = this.showSpinner.bind(this);
     this.listCities = this.listCities.bind(this);
     this.filterCities = this.filterCities.bind(this);
+    this.showWeather = this.showWeather.bind(this);
+    this.showMessage = this.showMessage.bind(this);
+    this.setMessage = this.setMessage.bind(this);
+
+    this.message = document.querySelector('.message');
+  }
+
+  setMessage(message) {
+    this.message.innerHTML = message;
+  }
+
+  showMessage(active) {
+    active?this.message.setAttribute('class', 'message d-flex'):this.message.setAttribute('class', 'message d-none');
   }
 
   showSpinner(active) {
@@ -12,19 +25,36 @@ class Weather {
 
   filterCities(beginCharacter) {
     let promise = new Promise((resolve, reject) => {
-      let result = this.cities.map(({id, name}) => {
-        if (name.toLowerCase().startsWith(beginCharacter.toLowerCase()))
-        {
-          return {id, name}
-        }
-        else
-          return "fail"
-      }).filter(city => {
-        return city !== "fail"
-      });
-      return resolve(result)
+      try{
+        let result = this.cities.map(({id, name}) => {
+          if (name.toLowerCase().startsWith(beginCharacter.toLowerCase()))
+          {
+            return {id, name}
+          }
+          else
+            return "fail"
+        }).filter(city => {
+          return city !== "fail"
+        });
+        return resolve(result)        
+      }
+      catch {
+        return reject("An error ocurred while working on cities");
+      }
     });
     return promise
+  }
+
+  async showWeather(event) {
+    this.showSpinner(true);
+    this.setMessage("Reading weather for the chosen city");
+    let readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&appid=2adf01b5e325f219ebee645945fa0afa`, 
+    {
+      method: 'GET',
+    });
+    let {weather, main} = await readWeather.json();
+    console.log(weather,main);
+    this.showSpinner(false);
   }
   
   async listCities(event) {
@@ -32,20 +62,19 @@ class Weather {
     let beginCharacter = searchCity.value;
     if (beginCharacter) {
       this.showSpinner(true);
-      let message = document.querySelector('.message');
-      message.setAttribute('class', 'message d-flex');
-      message.innerHTML = "Reading cities file";
+      this.showMessage(true);
+      this.setMessage("Reading cities file");
       const fetchCities = await fetch('city.list.min.json');
-      message.innerHTML = "File read, transforming in json";
+      this.setMessage("File read, transforming in json");
       this.cities = await fetchCities.json();
       const ulCities = document.querySelector('.cities');
   
-      message.innerHTML = "Fetching cities";
-      message.setAttribute('class', 'message d-none');
+      this.setMessage("Fetching cities");
+      this.showMessage(false);
       this.cities = await this.filterCities(beginCharacter);
       
       ulCities.innerHTML = '';
-      
+
       await this.cities.forEach(function({id, name}) {
         let li = document.createElement('li');
         let a = document.createElement('a');
@@ -57,6 +86,11 @@ class Weather {
         ulCities.appendChild(li);
       });
   
+      let citiesDropdownItem = document.querySelectorAll('.dropdown-item');
+      citiesDropdownItem.forEach(city => {
+        city.addEventListener('click', this.showWeather, false);
+      });
+
       let selectCities = document.querySelector('.select-cities');
       selectCities.setAttribute('class', 'dropdown select-cities d-flex');
 
