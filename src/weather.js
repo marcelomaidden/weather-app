@@ -65,7 +65,7 @@ class Weather {
     let {description, main: status}  = weather[0];
     title.innerHTML = city;
     text.innerHTML =  `${description}`;
-    temperature.innerText = `Temperature: ${temp}`
+    temperature.innerText = `Temperature: ${temp} celsius`
 
     await giphy.fetchGif(`https://api.giphy.com/v1/gifs/translate?api_key=${API_KEY.GIPHY_KEY}&s=${status}`);
 
