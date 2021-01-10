@@ -55,20 +55,19 @@ class Weather {
   async showWeather(event) {
     this.showSpinner(true);
     this.setMessage('Reading weather for the chosen city');
-    let readWeather = "";
-    let city = "";
-    if(this.latitude && this.longitude) {
+    let readWeather = '';
+    let city = '';
+    if (this.latitude && this.longitude) {
       readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&appid=${API_KEY.API_KEY}`,
-      {
-        method: 'GET',
-      });
+        {
+          method: 'GET',
+        });
       city = `Current coordinates = latitude: ${this.latitude}, longitude: ${this.longitude}`;
-    }
-    else{
+    } else {
       readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`,
-      {
-        method: 'GET',
-      });
+        {
+          method: 'GET',
+        });
 
       city = event.target.innerText;
     }
