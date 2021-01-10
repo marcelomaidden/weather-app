@@ -11,7 +11,7 @@ class Weather {
     this.setPosition = this.setPosition.bind(this);
     this.showMessage = this.showMessage.bind(this);
     this.setMessage = this.setMessage.bind(this);
-
+    this.switchTemperature = this.switchTemperature.bind(this);
     this.message = document.querySelector('.message');
   }
 
@@ -46,9 +46,27 @@ class Weather {
     return promise;
   }
 
+  switchTemperature() {
+    const temperature = document.querySelector('.temperature');
+    const sw = document.querySelector('#switch-temperature');
+    let type = '';
+    if (sw.checked) {
+      this.temperature = parseFloat(this.temperature) * 1.8 + 32;
+      type = 'Fahrenheit';
+    } else {
+      this.temperature = (parseFloat(this.temperature) - 32) / 1.8;
+      type = 'celsius';
+    }
+    temperature.innerHTML = `Temperature: ${this.temperature.toLocaleString('en-IN', { maximumSignificantDigits: 4 })} ${type}`;
+  }
+
   setPosition(position) {
     this.latitude = position.coords.latitude;
     this.longitude = position.coords.longitude;
+
+    const switchTemp = document.querySelector('#switch-temperature');
+    switchTemp.addEventListener('click', this.switchTemperature, false);
+
     this.showWeather();
   }
 
@@ -57,33 +75,39 @@ class Weather {
     this.setMessage('Reading weather for the chosen city');
     let readWeather = '';
     let city = '';
-    if (this.latitude && this.longitude) {
-      readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&appid=${API_KEY.API_KEY}`,
-        {
-          method: 'GET',
-        });
-      city = `Current coordinates = latitude: ${this.latitude}, longitude: ${this.longitude}`;
-    } else {
-      readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`,
-        {
-          method: 'GET',
-        });
+    try {
+      if (this.latitude && this.longitude) {
+        readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.latitude}&lon=${this.longitude}&units=metric&appid=${API_KEY.API_KEY}`,
+          {
+            method: 'GET',
+          });
+        city = `Current coordinates = latitude: ${this.latitude}, longitude: ${this.longitude}`;
+      } else {
+        readWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${event.target.id}&units=metric&appid=${API_KEY.API_KEY}`,
+          {
+            method: 'GET',
+          });
 
-      city = event.target.innerText;
+        city = event.target.innerText;
+      }
+
+      const { weather, main: info } = await readWeather.json();
+      const { temp } = info;
+      this.temperature = temp;
+
+      const title = document.querySelector('.card-title');
+      const text = document.querySelector('.card-text');
+      const temperature = document.querySelector('.temperature');
+      const { description, main: status } = weather[0];
+      title.innerHTML = city;
+      text.innerHTML = `${description}`;
+      temperature.innerText = `Temperature: ${temp}`;
+      const sw = document.querySelector('#switch-temperature');
+      sw.checked = false;
+      await giphy.fetchGif(`https://api.giphy.com/v1/gifs/translate?api_key=${API_KEY.GIPHY_KEY}&s=${status}`);
+    } catch (e) {
+      this.showMessage(e, true);
     }
-    const { weather, main: info } = await readWeather.json();
-    const { temp } = info;
-
-    const title = document.querySelector('.card-title');
-    const text = document.querySelector('.card-text');
-    const temperature = document.querySelector('.temperature');
-    const { description, main: status } = weather[0];
-    title.innerHTML = city;
-    text.innerHTML = `${description}`;
-    temperature.innerText = `Temperature: ${temp} celsius`;
-
-    await giphy.fetchGif(`https://api.giphy.com/v1/gifs/translate?api_key=${API_KEY.GIPHY_KEY}&s=${status}`);
-
     this.showSpinner(false);
   }
 
