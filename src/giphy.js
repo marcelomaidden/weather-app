@@ -13,7 +13,7 @@ class Giphy {
 
         div.setAttribute('style', `background: linear-gradient(to bottom, rgba(0, 0, 100, 0.5), 
         rgba(0, 0, 200, 0.5), rgba(0, 0, 0, 1)), 
-        url(${this.images[0].url}) no-repeat center center`);
+        url(${this.images[0].url}) no-repeat center 120px/800px`);
       });
     });
   }
