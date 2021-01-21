@@ -1,4 +1,44 @@
 .card {
   width: 100%;
   height: 598px;
+  background: none;
+  border: 0;
+}
+
+.results {
+  padding-top: 50px;
+}
+
+.main {
+  padding-top: 100px;
+}
+
+.message {
+  color: white;
+}
+
+.form-switch {
+  right: 100px;
+}
+
+.form-switch .form-check-input {
+  width: 60px;
+  height: 30px;
+}
+
+.form-check-input::after, 
+.form-check-input::before {
+  color: rgb(88, 87, 87);
+  position: absolute;
+  font-size: 20px;
+}
+
+.form-check-input::before {
+  content: "C";
+  left: 5px;
+}
+
+.form-check-input::after {
+  content: "F";
+  right: 5px;
 }
